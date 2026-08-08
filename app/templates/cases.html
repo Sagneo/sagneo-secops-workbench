@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Cases</title><link rel="stylesheet" href="/static/workbench.css"></head>
+<body><main>
+<h1>Incident cases</h1><nav><a href="/">Home</a> <a href="/alerts">Alerts</a></nav>
+<table><thead><tr><th>Status</th><th>Title</th><th>Asset</th><th>Created UTC</th></tr></thead><tbody>
+{% for case in cases %}<tr><td>{{ case.status }}</td><td><a href="/cases/{{ case.id }}">{{ case.title }}</a></td><td>{{ case.asset.hostname }}</td><td>{{ case.created_at }}</td></tr>{% endfor %}
+</tbody></table>
+</main></body></html>

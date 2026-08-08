@@ -1,0 +1,24 @@
+schema_version: 1.0.0
+rule_id: NET-001
+version: 1.0.0
+title: High-severity Suricata alert for endpoint
+description: Detects high-severity Suricata network alerts whose destination is the lab endpoint.
+source_type: SURICATA_EVE
+severity: HIGH
+confidence: HIGH
+required_fields:
+  - source_type
+  - asset_id
+  - timestamp_utc
+  - category
+  - action
+  - outcome
+  - severity
+  - destination_ip
+condition:
+  kind: high_suricata
+detection_rationale: A normalized high-severity Suricata alert targeting the lab endpoint indicates notable network activity.
+severity_rationale: The source event is explicitly high severity and targets the monitored endpoint.
+confidence_rationale: Source type, asset, category, action, observed outcome, severity, and destination must all be present.
+false_positive_context: Synthetic lab signatures or known scanner traffic may be expected.
+recommended_action: Review linked network context and validate endpoint exposure.

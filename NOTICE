@@ -1,0 +1,9 @@
+Sagneo SecOps Workbench
+Copyright 2026 Sagneo
+
+Licensed under the Apache License, Version 2.0.
+
+The committed telemetry and collection fixtures are deterministic synthetic lab
+data. Third-party Python packages and container components retain their respective
+licenses; their exact locked versions are listed in the requirements files and
+container definition.

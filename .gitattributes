@@ -1,0 +1,19 @@
+# Deterministic fixture provenance uses byte-identical LF records on every host.
+fixtures/linux/*.log text eol=lf
+fixtures/suricata/*.jsonl text eol=lf
+fixtures/expected/*.json text eol=lf
+
+# Executable and source artifacts used inside Linux guests/containers.
+*.sh text eol=lf
+*.py text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.html text eol=lf
+*.toml text eol=lf
+*.ini text eol=lf
+Dockerfile text eol=lf
+.env.example text eol=lf
+.gitignore text eol=lf
+NOTICE text eol=lf
+LICENSE text eol=lf

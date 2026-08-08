@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Alerts</title><link rel="stylesheet" href="/static/workbench.css"></head>
+<body>
+<main>
+  <h1>Alert queue</h1>
+  <p>Signed in as {{ user.username }} ({{ user.role }}). Deterministic fixture alerts only.</p>
+  <nav><a href="/">Home</a> <a href="/events">Events</a></nav>
+  <form method="get" action="/alerts">
+    <fieldset>
+      <legend>Filter alerts</legend>
+      <label for="status">Status</label>
+      <select id="status" name="status">
+        <option value="">All statuses</option>
+        {% for option in status_options %}
+        <option value="{{ option }}" {% if filters.status == option %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+      </select>
+      <label for="severity">Severity</label>
+      <select id="severity" name="severity">
+        <option value="">All severities</option>
+        {% for option in severity_options %}
+        <option value="{{ option }}" {% if filters.severity == option %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+      </select>
+      <label for="rule_id">Rule</label>
+      <select id="rule_id" name="rule_id">
+        <option value="">All rules</option>
+        {% for option in rule_options %}
+        <option value="{{ option }}" {% if filters.rule_id == option %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+      </select>
+      <label for="page_size">Rows per page</label>
+      <select id="page_size" name="page_size">
+        {% for option in [25, 50, 100] %}
+        <option value="{{ option }}" {% if page_size == option %}selected{% endif %}>{{ option }}</option>
+        {% endfor %}
+      </select>
+      <button type="submit">Apply filters</button>
+      <a href="/alerts">Clear filters</a>
+    </fieldset>
+  </form>
+  <p role="status">Showing {{ alerts|length }} of {{ total }} alert(s). Page {{ page }} of {{ total_pages }}.</p>
+  <table>
+    <caption>Deterministic alert results</caption>
+    <thead><tr><th>Status</th><th>Severity</th><th>Rule</th><th>Asset</th><th>Title</th><th>Created UTC</th></tr></thead>
+    <tbody>
+    {% for alert in alerts %}
+      <tr>
+        <td>{{ alert.status }}</td>
+        <td>{{ alert.severity }}</td>
+        <td>{{ alert.rule_version.rule_id }}@{{ alert.rule_version.version }}</td>
+        <td>{{ alert.asset.hostname }}</td>
+        <td><a href="/alerts/{{ alert.id }}">{{ alert.title }}</a></td>
+        <td>{{ alert.created_at }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% if previous_url or next_url %}<nav aria-label="Alert pages">
+    {% if previous_url %}<a rel="prev" href="{{ previous_url }}">Previous page</a>{% endif %}
+    {% if next_url %}<a rel="next" href="{{ next_url }}">Next page</a>{% endif %}
+  </nav>{% endif %}
+</main>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0.0",
+  "input": {
+    "normalized_events": 1201,
+    "linux_auth_events": 601,
+    "suricata_eve_events": 600
+  },
+  "rules": {
+    "AUTH-001": {
+      "version": "1.0.0",
+      "sha256": "6c496b9b6c0038a5f0cf2d5cbccab1bf31f2d76e42786d0b2fa3d626d93fe7e4"
+    },
+    "AUTH-002": {
+      "version": "1.0.0",
+      "sha256": "4fe76e12e4346b0c9985770ae853a7f6c0b4a117b436dbef7b6a0484a2d153dc"
+    },
+    "NET-001": {
+      "version": "1.0.0",
+      "sha256": "d9d05b75803137dcdd7dcab1de6be1cd2e7ad2c2bf18c3be85848d40fe56dd86"
+    },
+    "PRIV-001": {
+      "version": "1.0.0",
+      "sha256": "1590123ca7fc3dce7e356ad58de0c2ca91af0feaa630f0c5751762b6f74e4374"
+    }
+  },
+  "exact_alerts_by_rule": {
+    "AUTH-001": 404,
+    "AUTH-002": 41,
+    "NET-001": 100,
+    "PRIV-001": 120
+  },
+  "exact_total_alerts": 665,
+  "exact_alert_event_links": 1555
+}

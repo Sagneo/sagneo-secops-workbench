@@ -1,0 +1,26 @@
+schema_version: 1.0.0
+rule_id: AUTH-002
+version: 1.0.0
+title: Successful SSH after repeated failures
+description: Detects a successful SSH password login after repeated failures by the same actor.
+source_type: LINUX_AUTH
+severity: CRITICAL
+confidence: HIGH
+required_fields:
+  - source_type
+  - asset_id
+  - timestamp_utc
+  - category
+  - action
+  - outcome
+  - actor
+condition:
+  kind: success_after_failures
+  threshold: 2
+  window_seconds: 300
+  group_by: actor
+detection_rationale: A successful SSH password login following failures by the same actor may indicate credential compromise.
+severity_rationale: A successful login after suspicious failures can represent completed unauthorized access.
+confidence_rationale: The rule requires the same normalized actor, ordered outcomes, and bounded event window.
+false_positive_context: A legitimate user may succeed after correcting credentials.
+recommended_action: Confirm the account owner and source, then rotate credentials if suspicious.

@@ -1,0 +1,46 @@
+# Secrets and local configuration
+.env
+*.key
+*.pem
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pip-audit-cache/
+
+# Runtime data
+data/
+*.db
+*.sqlite
+*.sqlite3
+*.pcap
+*.pcapng
+evidence/private/
+
+# Local generated output and scratch state
+.local/
+output/
+tmp/
+
+# Virtualization and installation media
+*.iso
+*.vmdk
+*.vmem
+*.vmss
+*.vmsn
+*.vmx
+*.vmxf
+*.nvram
+vmware.log
+.vmware/
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db

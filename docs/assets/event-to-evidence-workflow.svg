@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 610" role="img" aria-labelledby="title desc">
+  <title id="title">Sagneo SecOps Workbench event-to-evidence workflow</title>
+  <desc id="desc">A two-row snake workflow from bounded synthetic telemetry through normalization, detection, analyst triage, reviewer-gated collection, integrity verification, and sanitized evidence.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#16243b"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#020617" flood-opacity=".42"/>
+    </filter>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+      <path d="M0 0 10 5 0 10z" fill="#94a3b8"/>
+    </marker>
+    <style>
+      .lane{font:700 13px system-ui,-apple-system,Segoe UI,sans-serif;letter-spacing:2.2px;fill:#94a3b8}
+      .step{font:700 12px system-ui,-apple-system,Segoe UI,sans-serif;fill:#0b1220;text-anchor:middle}
+      .heading{font:700 17px system-ui,-apple-system,Segoe UI,sans-serif;fill:#f8fafc;text-anchor:middle}
+      .detail{font:400 13px system-ui,-apple-system,Segoe UI,sans-serif;fill:#cbd5e1;text-anchor:middle}
+      .flow{fill:none;stroke:#94a3b8;stroke-width:3;stroke-linecap:round;marker-end:url(#arrow)}
+      .node{stroke-width:1.5;rx:16;filter:url(#shadow)}
+    </style>
+  </defs>
+
+  <rect width="1200" height="610" rx="24" fill="url(#bg)"/>
+  <circle cx="1110" cy="72" r="118" fill="#2563eb" opacity=".08"/>
+  <circle cx="92" cy="548" r="150" fill="#10b981" opacity=".07"/>
+
+  <text x="34" y="42" class="lane">INGEST &amp; DETECT</text>
+  <text x="34" y="332" class="lane">INVESTIGATE &amp; PROVE</text>
+
+  <!-- top row connectors -->
+  <path class="flow" d="M226 167H252"/>
+  <path class="flow" d="M456 167H482"/>
+  <path class="flow" d="M686 167H712"/>
+  <path class="flow" d="M916 167H942"/>
+  <!-- turn and bottom row connectors -->
+  <path class="flow" d="M1070 226V360"/>
+  <path class="flow" d="M972 455H946"/>
+  <path class="flow" d="M742 455H716"/>
+  <path class="flow" d="M512 455H486"/>
+  <path class="flow" d="M282 455H256"/>
+
+  <!-- 01 -->
+  <rect class="node" x="30" y="105" width="196" height="122" fill="#132d4f" stroke="#38bdf8"/>
+  <circle cx="55" cy="128" r="15" fill="#38bdf8"/><text x="55" y="132" class="step">01</text>
+  <text x="128" y="154" class="heading">Synthetic inputs</text>
+  <text x="128" y="181" class="detail">Linux auth logs</text>
+  <text x="128" y="201" class="detail">Suricata EVE JSON</text>
+
+  <!-- 02 -->
+  <rect class="node" x="260" y="105" width="196" height="122" fill="#132d4f" stroke="#38bdf8"/>
+  <circle cx="285" cy="128" r="15" fill="#38bdf8"/><text x="285" y="132" class="step">02</text>
+  <text x="358" y="154" class="heading">Validate &amp; normalize</text>
+  <text x="358" y="181" class="detail">Hash · UTC · deduplicate</text>
+  <text x="358" y="201" class="detail">Parser errors isolated</text>
+
+  <!-- 03 -->
+  <rect class="node" x="490" y="105" width="196" height="122" fill="#132d4f" stroke="#38bdf8"/>
+  <circle cx="515" cy="128" r="15" fill="#38bdf8"/><text x="515" y="132" class="step">03</text>
+  <text x="588" y="154" class="heading">Normalized event</text>
+  <text x="588" y="181" class="detail">Stable identity</text>
+  <text x="588" y="201" class="detail">Safe file + line provenance</text>
+
+  <!-- 04 -->
+  <rect class="node" x="720" y="105" width="196" height="122" fill="#2a1f54" stroke="#a78bfa"/>
+  <circle cx="745" cy="128" r="15" fill="#a78bfa"/><text x="745" y="132" class="step">04</text>
+  <text x="818" y="154" class="heading">Detection rules</text>
+  <text x="818" y="181" class="detail">Five immutable versions</text>
+  <text x="818" y="201" class="detail">Transparent provenance</text>
+
+  <!-- 05 -->
+  <rect class="node" x="950" y="105" width="196" height="122" fill="#4a2a15" stroke="#f59e0b"/>
+  <circle cx="975" cy="128" r="15" fill="#f59e0b"/><text x="975" y="132" class="step">05</text>
+  <text x="1048" y="154" class="heading">Alert triage</text>
+  <text x="1048" y="181" class="detail">Queue · rationale · status</text>
+  <text x="1048" y="201" class="detail">Append-only history</text>
+
+  <!-- 06 -->
+  <rect class="node" x="950" y="394" width="196" height="122" fill="#4a2a15" stroke="#f59e0b"/>
+  <circle cx="975" cy="417" r="15" fill="#f59e0b"/><text x="975" y="421" class="step">06</text>
+  <text x="1048" y="443" class="heading">Case timeline</text>
+  <text x="1048" y="470" class="detail">Analyst decisions</text>
+  <text x="1048" y="490" class="detail">Escalation + audit trail</text>
+
+  <!-- 07 -->
+  <rect class="node" x="720" y="394" width="196" height="122" fill="#2a1f54" stroke="#a78bfa"/>
+  <circle cx="745" cy="417" r="15" fill="#a78bfa"/><text x="745" y="421" class="step">07</text>
+  <text x="818" y="443" class="heading">Reviewer gate</text>
+  <text x="818" y="470" class="detail">Fixed target + profile</text>
+  <text x="818" y="490" class="detail">Explicit bounded limits</text>
+
+  <!-- 08 -->
+  <rect class="node" x="490" y="394" width="196" height="122" fill="#123c36" stroke="#34d399"/>
+  <circle cx="515" cy="417" r="15" fill="#34d399"/><text x="515" y="421" class="step">08</text>
+  <text x="588" y="443" class="heading">Collection</text>
+  <text x="588" y="470" class="detail">One bounded lab run</text>
+  <text x="588" y="490" class="detail">8 bounded artifacts</text>
+
+  <!-- 09 -->
+  <rect class="node" x="260" y="394" width="196" height="122" fill="#123c36" stroke="#34d399"/>
+  <circle cx="285" cy="417" r="15" fill="#34d399"/><text x="285" y="421" class="step">09</text>
+  <text x="358" y="443" class="heading">Integrity verification</text>
+  <text x="358" y="470" class="detail">Canonical manifest</text>
+  <text x="358" y="490" class="detail">SHA-256 · fail closed</text>
+
+  <!-- 10 -->
+  <rect class="node" x="30" y="394" width="196" height="122" fill="#123c36" stroke="#34d399"/>
+  <circle cx="55" cy="417" r="15" fill="#34d399"/><text x="55" y="421" class="step">10</text>
+  <text x="128" y="443" class="heading">Evidence package</text>
+  <text x="128" y="470" class="detail">Sanitized public index</text>
+  <text x="128" y="490" class="detail">Private raw bundle retained</text>
+
+  <text x="600" y="570" class="detail">Every transition is attributable, bounded, and preserved without rewriting failure history.</text>
+</svg>

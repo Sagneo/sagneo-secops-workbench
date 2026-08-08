@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Alert detail</title><link rel="stylesheet" href="/static/workbench.css"></head>
+<body><main>
+  <h1>Alert detail</h1>
+  <nav><a href="/alerts">Alert queue</a> <a href="/events">Events</a> <a href="/cases">Cases</a></nav>
+  <dl>
+    <dt>Status</dt><dd>{{ alert.status }}</dd>
+    <dt>Rule provenance</dt><dd>{{ alert.rule_version.rule_id }} version {{ alert.rule_version.version }} / {{ alert.rule_version.content_digest }}</dd>
+    {% if alert.event_links %}
+    <dt>UTC sequence</dt><dd>{{ alert.event_links[0].event.timestamp_utc }} — {{ alert.event_links[-1].event.timestamp_utc }}</dd>
+    <dt>Asset and identity/source IP</dt><dd>{{ alert.asset.hostname }} ({{ alert.asset.lab_ip }}); actor {{ alert.event_links[-1].event.actor or "none" }}; source {{ alert.event_links[-1].event.source_ip or "none" }}</dd>
+    {% else %}<dt>UTC sequence</dt><dd>{{ alert.created_at }}</dd><dt>Asset</dt><dd>{{ alert.asset.hostname }} ({{ alert.asset.lab_ip }})</dd>{% endif %}
+    <dt>Trigger/link</dt><dd>{{ alert.trigger_summary }}</dd>
+    <dt>Scope/impact</dt><dd>{{ alert.scope_impact or "Not yet recorded" }}</dd>
+    <dt>Severity/confidence rationale</dt><dd>{{ alert.severity_rationale }}</dd>
+    <dt>False-positive context</dt><dd>{{ alert.false_positive_context }}</dd>
+    <dt>Disposition reason</dt><dd>{{ alert.disposition_reason or "Not yet recorded" }}</dd>
+    <dt>Recommended action</dt><dd>{{ alert.recommended_action }}</dd>
+    <dt>Analyst notes</dt><dd>{{ alert.analyst_notes or "Not yet recorded" }}</dd>
+    <dt>Stable identity</dt><dd>{{ alert.stable_identity }}</dd>
+  </dl>
+  <h2>Linked normalized events</h2>
+  <ol>{% for link in alert.event_links %}<li><a href="/events/{{ link.event.id }}">{{ link.event.timestamp_utc }} — {{ link.event.summary }}</a> — {{ link.event.raw_reference }}</li>{% endfor %}</ol>
+  <h2>Append-only history</h2>
+  <ol>{% for item in alert.history %}<li>{{ item.created_at }} {{ item.action }} {{ item.from_status or "" }} → {{ item.to_status or "" }} {{ item.detail }}</li>{% endfor %}</ol>
+  {% if is_analyst and alert.status == "ESCALATED" %}
+  <h2>Create case</h2>
+  <form method="post" action="/alerts/{{ alert.id }}/cases"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><label>Case title <input name="title" required maxlength="160"></label><button type="submit">Create case from alert</button></form>
+  {% endif %}
+  {% if is_analyst and alert.status != "CLOSED" %}
+  <h2>Analyst triage</h2>
+  <form method="post" action="/alerts/{{ alert.id }}/triage">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="version" value="{{ alert.version }}">
+    <label>Scope / impact <textarea name="scope_impact">{{ alert.scope_impact }}</textarea></label><br>
+    <label>False-positive context <textarea name="false_positive_context">{{ alert.false_positive_context }}</textarea></label><br>
+    <label>Disposition reason <textarea name="disposition_reason">{{ alert.disposition_reason }}</textarea></label><br>
+    <label>Recommended action <textarea name="recommended_action">{{ alert.recommended_action }}</textarea></label><br>
+    <label>Analyst notes <textarea name="analyst_notes">{{ alert.analyst_notes }}</textarea></label><br>
+    <label>Transition <select name="next_status">{% if alert.status == "NEW" %}<option>IN_TRIAGE</option>{% endif %}{% if alert.status == "IN_TRIAGE" %}<option>ESCALATED</option><option>BENIGN</option>{% endif %}{% if alert.status == "ESCALATED" or alert.status == "BENIGN" %}<option>CLOSED</option>{% endif %}</select></label>
+    <button type="submit">Save and transition</button>
+  </form>
+  {% elif not is_analyst %}<p>Reviewer access is read-only except collection approval.</p>{% endif %}
+</main></body></html>

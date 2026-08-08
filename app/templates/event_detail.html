@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Event detail</title><link rel="stylesheet" href="/static/workbench.css"></head>
+<body>
+<main>
+  <nav aria-label="Workbench"><a href="/events">Events</a> <a href="/sources">Sources</a></nav>
+  <h1>Normalized event detail</h1>
+  <dl>
+    <dt>UTC timestamp</dt><dd>{{ event.timestamp_utc }}</dd>
+    <dt>Source type</dt><dd>{{ event.source_type }}</dd>
+    <dt>Asset</dt><dd>{{ event.asset.hostname }} ({{ event.asset.lab_ip }})</dd>
+    <dt>Category / action / outcome</dt><dd>{{ event.category }} / {{ event.action }} / {{ event.outcome }}</dd>
+    <dt>Severity</dt><dd>{{ event.severity }}</dd>
+    <dt>Actor</dt><dd>{{ event.actor or "none" }}</dd>
+    <dt>Source / destination</dt><dd>{{ event.source_ip or "none" }} / {{ event.destination_ip or "none" }}</dd>
+    <dt>Summary</dt><dd>{{ event.summary }}</dd>
+    <dt>Normalized fields</dt><dd><code>{{ event.normalized_data }}</code></dd>
+    <dt>Safe source reference</dt><dd><code>{{ event.raw_reference }}</code></dd>
+    <dt>Stable identity</dt><dd><code>{{ event.stable_identity }}</code></dd>
+    <dt>Batch digest / parser version</dt><dd><code>{{ event.batch.content_digest }}</code> / {{ event.batch.parser_version }}</dd>
+  </dl>
+</main>
+</body>
+</html>

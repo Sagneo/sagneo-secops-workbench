@@ -1,0 +1,57 @@
+[project]
+name = "sagneo-secops-workbench"
+version = "1.0.0"
+description = "Isolated synthetic-telemetry SecOps workbench"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "alembic==1.16.5",
+  "fastapi==0.139.2",
+  "jinja2==3.1.6",
+  "pwdlib[argon2]==0.2.1",
+  "python-multipart==0.0.32",
+  "pyyaml==6.0.3",
+  "sqlalchemy==2.0.43",
+  "uvicorn[standard]==0.35.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "bandit==1.8.6",
+  "httpx==0.28.1",
+  "mypy==1.17.1",
+  "pip-audit==2.9.0",
+  "pytest==9.1.1",
+  "pytest-cov==6.2.1",
+  "ruff==0.12.9",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "S"]
+ignore = ["S101", "B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/conftest.py" = ["E402"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["app"]
+
+[build-system]
+requires = ["setuptools>=80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+exclude = ["tests*", "alembic*", "data*"]
+
+[tool.bandit]
+exclude_dirs = ["tests"]

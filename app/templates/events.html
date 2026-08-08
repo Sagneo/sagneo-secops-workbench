@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Events</title><link rel="stylesheet" href="/static/workbench.css"></head>
+<body>
+<main>
+  <nav aria-label="Workbench"><a href="/">Home</a> <a href="/sources">Sources</a></nav>
+  <h1>Normalized events</h1>
+  <p>Showing the newest 100 accepted synthetic events.</p>
+  <table>
+    <thead><tr><th scope="col">UTC timestamp</th><th scope="col">Source</th><th scope="col">Asset</th><th scope="col">Category</th><th scope="col">Outcome</th><th scope="col">Severity</th><th scope="col">Summary</th><th scope="col">Reference</th></tr></thead>
+    <tbody>
+    {% for event in events %}
+      <tr>
+        <td>{{ event.timestamp_utc }}</td><td>{{ event.source_type }}</td><td>{{ event.asset.hostname }}</td>
+        <td>{{ event.category }}</td><td>{{ event.outcome }}</td><td>{{ event.severity }}</td>
+        <td><a href="/events/{{ event.id }}">{{ event.summary }}</a></td><td><code>{{ event.raw_reference }}</code></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

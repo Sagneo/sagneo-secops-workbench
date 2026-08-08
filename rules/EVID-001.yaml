@@ -1,0 +1,21 @@
+schema_version: 1.0.0
+rule_id: EVID-001
+version: 1.0.0
+title: Evidence integrity verification failed
+description: Detects an independently verified evidence bundle with missing, extra, or modified content.
+source_type: EVIDENCE_VERIFICATION
+severity: HIGH
+confidence: HIGH
+required_fields:
+  - source_type
+  - asset_id
+  - timestamp_utc
+  - status
+  - reason_codes
+condition:
+  kind: verification_failed
+detection_rationale: Independent verification found that stored evidence no longer matches its canonical manifest.
+severity_rationale: Evidence integrity failure can invalidate forensic conclusions and must be investigated.
+confidence_rationale: The verifier recomputes file inventory, sizes, and SHA-256 digests without trusting stored database results.
+false_positive_context: Authorized testing may deliberately modify a private copy of an accepted bundle.
+recommended_action: Preserve the accepted bundle, isolate the failed copy, and review verification reason codes and access history.

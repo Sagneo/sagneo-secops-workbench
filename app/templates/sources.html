@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Sources</title><link rel="stylesheet" href="/static/workbench.css"></head>
+<body>
+<main>
+  <nav aria-label="Workbench"><a href="/">Home</a> <a href="/events">Events</a></nav>
+  <h1>Telemetry sources</h1>
+  <p>Signed in as {{ user.username }} ({{ user.role }}).</p>
+  <table>
+    <caption>Deterministic source health</caption>
+    <thead><tr><th scope="col">Source type</th><th scope="col">State</th><th scope="col">Last successful batch</th><th scope="col">Latest source timestamp (UTC)</th><th scope="col">Events</th><th scope="col">Errors</th><th scope="col">Latest high-priority signal</th></tr></thead>
+    <tbody>
+    {% for source in sources %}
+      <tr>
+        <th scope="row">{{ source.source_type }}</th>
+        <td>{{ source.state }}</td>
+        <td>{% if source.last_successful_batch %}<code>{{ source.last_successful_batch.content_digest }}</code> at {{ source.last_successful_batch.imported_at }}{% else %}none{% endif %}</td>
+        <td>{{ source.latest_source_timestamp or "none" }}</td>
+        <td>{{ source.total_events }}</td>
+        <td>{{ source.total_errors }}</td>
+        <td>{% if source.latest_high_priority %}<a href="/events/{{ source.latest_high_priority.id }}">{{ source.latest_high_priority.summary }}</a>{% else %}none{% endif %}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Thin lab assets</h2>
+  <table>
+    <thead><tr><th scope="col">Stable ID</th><th scope="col">Hostname</th><th scope="col">Operating system</th><th scope="col">Lab IP</th><th scope="col">Purpose / owner</th><th scope="col">Criticality</th><th scope="col">Last observed (UTC)</th></tr></thead>
+    <tbody>
+    {% for asset in assets %}
+      <tr><td><code>{{ asset.id }}</code></td><td>{{ asset.hostname }}</td><td>{{ asset.operating_system }}</td><td>{{ asset.lab_ip }}</td><td>{{ asset.purpose_owner }}</td><td>{{ asset.criticality }}</td><td>{{ asset.last_observed_at or "none" }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Recent batches</h2>
+  <table>
+    <thead><tr><th scope="col">Source</th><th scope="col">Imported (UTC)</th><th scope="col">Status</th><th scope="col">Digest</th><th scope="col">Parser</th><th scope="col">Total</th><th scope="col">Accepted</th><th scope="col">Duplicates</th><th scope="col">Errors</th><th scope="col">Reference</th></tr></thead>
+    <tbody>
+    {% for batch in batches %}
+      <tr>
+        <td>{{ batch.source_type }}</td><td>{{ batch.imported_at }}</td><td>{{ batch.status }}</td>
+        <td><code>{{ batch.content_digest }}</code></td><td>{{ batch.parser_version }}</td>
+        <td>{{ batch.total_records }}</td><td>{{ batch.accepted_records }}</td><td>{{ batch.duplicate_records }}</td><td>{{ batch.error_records }}</td>
+        <td><code>{{ batch.source_reference }}</code></td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

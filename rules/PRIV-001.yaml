@@ -1,0 +1,23 @@
+schema_version: 1.0.0
+rule_id: PRIV-001
+version: 1.0.0
+title: Unexpected sudo activity
+description: Detects successful normalized sudo command execution on the lab endpoint.
+source_type: LINUX_AUTH
+severity: MEDIUM
+confidence: MEDIUM
+required_fields:
+  - source_type
+  - asset_id
+  - timestamp_utc
+  - category
+  - action
+  - outcome
+  - actor
+condition:
+  kind: sudo_activity
+detection_rationale: Successful sudo execution changes privilege context and warrants validation against approved work.
+severity_rationale: Privilege use is security-relevant but may be routine authorized administration.
+confidence_rationale: The normalized event proves sudo success and actor context, but intent requires analyst review.
+false_positive_context: Approved administrative work can produce expected sudo activity.
+recommended_action: Validate the command, actor, change window, and target asset.

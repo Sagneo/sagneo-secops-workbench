@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>Case detail</title><link rel="stylesheet" href="/static/workbench.css"></head>
+<body><main>
+<h1>Case detail</h1><nav><a href="/cases">Cases</a> <a href="/alerts">Alerts</a></nav>
+<dl><dt>Status</dt><dd>{{ case.status }}</dd><dt>Title</dt><dd>{{ case.title }}</dd><dt>Asset</dt><dd>{{ case.asset.hostname }} ({{ case.asset.lab_ip }})</dd><dt>Resolution</dt><dd>{{ case.resolution or "Not yet recorded" }}</dd><dt>Closure summary</dt><dd>{{ case.closure_summary or "Not yet recorded" }}</dd></dl>
+<h2>Linked alerts</h2><ol>{% for link in case.alert_links %}<li><a href="/alerts/{{ link.alert.id }}">{{ link.alert.rule_version.rule_id }} — {{ link.alert.title }}</a> ({{ link.alert.status }})</li>{% endfor %}</ol>
+<h2>Timeline</h2><ol>{% for item in case.timeline %}<li>{{ item.created_at }} {{ item.entry_type }} — {{ item.detail }}</li>{% endfor %}</ol>
+<h2>Collection requests</h2>
+{% for collection in case.collection_requests %}<section>
+<h3>{{ collection.profile_id }} via {{ collection.adapter }} — {{ collection.status }}</h3>
+<p>Target: {{ collection.target_asset.hostname }} ({{ collection.target_asset.lab_ip }})</p><p>Profile digest: {{ collection.profile_digest }}</p><p>Limits: {{ collection.limits_json }}</p>
+{% if collection.reviewer_reason %}<p>Reviewer reason: {{ collection.reviewer_reason }}</p>{% endif %}{% if collection.result_summary %}<p>Result: {{ collection.result_summary }}</p>{% endif %}
+<ol>{% for item in collection.history %}<li>{{ item.created_at }} {{ item.action }} {{ item.from_status or "" }} → {{ item.to_status or "" }} {{ item.detail }}</li>{% endfor %}</ol>
+{% if is_analyst and collection.status == "DRAFT" %}<form method="post" action="/collections/{{ collection.id }}/submit"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="version" value="{{ collection.version }}"><button type="submit">Submit for review</button></form>{% endif %}
+{% if is_reviewer and collection.status == "SUBMITTED" %}<form method="post" action="/collections/{{ collection.id }}/review"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="version" value="{{ collection.version }}"><label>Reason <textarea name="reason" required></textarea></label><button name="decision" value="APPROVED" type="submit">Approve exact request</button><button name="decision" value="REJECTED" type="submit">Reject</button></form>{% endif %}
+{% if is_analyst and collection.status == "APPROVED" %}<form method="post" action="/collections/{{ collection.id }}/execute"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="version" value="{{ collection.version }}"><button type="submit">Execute approved collection</button></form>{% endif %}
+{% if collection.evidence_bundle %}<h4>Evidence bundle</h4><p>ID {{ collection.evidence_bundle.id }}; bytes {{ collection.evidence_bundle.total_bytes }}; manifest SHA-256 {{ collection.evidence_bundle.manifest_sha256 }}</p><ul>{% for artifact in collection.evidence_bundle.artifacts %}<li>{{ artifact.artifact_type }} — {{ artifact.size_bytes }} bytes — {{ artifact.sha256 }}</li>{% endfor %}</ul><p>Verification history: {% for verification in collection.evidence_bundle.verifications %}{{ verification.status }} ({{ verification.reason_codes_json }}) {% endfor %}</p>{% endif %}
+</section>{% endfor %}
+{% if is_analyst and can_request_collection %}
+<h2>Request collection</h2><form method="post" action="/cases/{{ case.id }}/collections"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="version" value="{{ case.version }}"><p>Fixed target: linux-endpoint-01 (192.168.90.20)</p><p>Fixed profile: {{ profile_id }}</p><label>Adapter <select name="adapter"><option value="ssh-lab">SshLabCollector</option><option value="fixture">FixtureCollector</option></select></label><button type="submit">Create immutable draft</button></form>
+{% endif %}
+{% if is_analyst and case.status != "CLOSED" %}
+<h2>Case transition</h2><form method="post" action="/cases/{{ case.id }}/transition"><input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="version" value="{{ case.version }}"><label>Resolution <textarea name="resolution">{{ case.resolution }}</textarea></label><br><label>Closure summary <textarea name="closure_summary">{{ case.closure_summary }}</textarea></label><br><label>No-collection reason <textarea name="no_collection_reason">{{ case.no_collection_reason }}</textarea></label><br><select name="next_status">{% if case.status == "OPEN" %}<option>INVESTIGATING</option>{% endif %}{% if case.status == "INVESTIGATING" %}<option>RESOLVED</option>{% endif %}{% if case.status == "RESOLVED" %}<option>CLOSED</option>{% endif %}</select><button type="submit">Save case transition</button></form>
+{% endif %}
+</main></body></html>

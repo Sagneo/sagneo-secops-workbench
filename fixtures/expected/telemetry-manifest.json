@@ -1,0 +1,37 @@
+{
+  "assets": 2,
+  "files": {
+    "fixtures/linux/auth-malformed.log": {
+      "accepted": 1,
+      "errors": 2,
+      "records": 3,
+      "sha256": "52ae60f5b584d49faceaf652ae15724f3fb702821094b9a3baa49421a8af18b0"
+    },
+    "fixtures/linux/auth.log": {
+      "accepted": 600,
+      "errors": 0,
+      "records": 600,
+      "sha256": "e57a2e76660792f7f304b7b3e2afd8f9089c780e0662c3ab24414770600be209"
+    },
+    "fixtures/suricata/eve-malformed.jsonl": {
+      "accepted": 1,
+      "errors": 2,
+      "records": 3,
+      "sha256": "105ec529852b30140fdf4f0455aa85a9b433eba9063dfd78c7b40854a42ed9b6"
+    },
+    "fixtures/suricata/eve.jsonl": {
+      "accepted": 600,
+      "errors": 0,
+      "records": 600,
+      "sha256": "c5bc72e92466913cd015795d29a0ec612b9354f1a9e4db974ed9085186260a81"
+    }
+  },
+  "fixture_set": "synthetic-auth-eve-v1",
+  "main_unique_events": 1200,
+  "parser_version": "1.0.0",
+  "provenance": "deterministic synthetic records generated locally without network input",
+  "source_types": [
+    "LINUX_AUTH",
+    "SURICATA_EVE"
+  ]
+}

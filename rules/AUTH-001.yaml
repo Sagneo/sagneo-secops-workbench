@@ -1,0 +1,26 @@
+schema_version: 1.0.0
+rule_id: AUTH-001
+version: 1.0.0
+title: Repeated failed SSH authentication
+description: Detects repeated failed SSH password attempts by one actor on the lab endpoint.
+source_type: LINUX_AUTH
+severity: HIGH
+confidence: HIGH
+required_fields:
+  - source_type
+  - asset_id
+  - timestamp_utc
+  - category
+  - action
+  - outcome
+  - actor
+condition:
+  kind: repeated_failures
+  threshold: 3
+  window_seconds: 120
+  group_by: actor
+detection_rationale: Multiple SSH password failures for one actor in a short window can indicate credential guessing.
+severity_rationale: Repeated access attempts against the monitored endpoint may precede account compromise.
+confidence_rationale: Normalized actor, outcome, and bounded timing must all match before this rule alerts.
+false_positive_context: Authorized password testing or a user repeatedly mistyping a password.
+recommended_action: Validate the actor and source context, then restrict access if unauthorized.

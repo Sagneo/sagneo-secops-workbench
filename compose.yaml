@@ -1,0 +1,40 @@
+services:
+  workbench:
+    build:
+      context: .
+    environment:
+      APP_ENV: lab
+      APP_DATABASE_URL: sqlite:////data/secops.db
+      APP_SESSION_COOKIE: secops_session
+      APP_SECURE_COOKIE: "false"
+      APP_SESSION_IDLE_MINUTES: "30"
+      APP_SESSION_ABSOLUTE_HOURS: "8"
+      APP_LOG_LEVEL: INFO
+      APP_INGEST_MAX_BYTES: "5242880"
+      APP_INGEST_MAX_LINE_BYTES: "16384"
+      APP_SOURCE_STALE_HOURS: "24"
+      APP_EVIDENCE_ROOT: /data/evidence
+      APP_COLLECTOR_SSH_KEY: /collector/linux-ir-lite-v1
+      APP_COLLECTOR_KNOWN_HOSTS: /collector/known_hosts
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - workbench-data:/data
+      - workbench-collector:/collector:ro
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m,mode=1777
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/live', timeout=2)"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  workbench-data:
+  workbench-collector:
